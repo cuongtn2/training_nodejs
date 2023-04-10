@@ -1,6 +1,6 @@
 // const fs = require('fs');
 const Tour = require('../models/tourModel');
-const APIFeatures = require('./../utils/apiFeatures')
+const APIFeatures = require('./../utils/apiFeatures');
 // const tours = JSON.parse(
 //   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 // );
@@ -149,6 +149,36 @@ exports.createTour = async (req, res) => {
         tours: newTours,
       },
     });
+  } catch (error) {
+    res.status(400).json({ message: error, status: 'fail' });
+  }
+};
+
+exports.getTourStats = async (req, res) => {
+  try {
+    const stats = await Tour.aggregate([
+      {
+        $match: { ratingsAverage: { $gte: 4.5 } },
+      },
+      {
+        $group: {
+          _id: '$difficulty',
+          sumTours: { $sum: 1 },
+          sumRating: { $sum: '$ratingsQuantity' },
+          avgRating: { $avg: '$ratingsAverage' },
+          avgPrice: { $avg: '$price' },
+          minPrice: { $min: '$price' },
+          maxPrice: { $max: '$price' },
+        },
+      },
+      {
+        $sort: { minPrice: 1 },
+      },
+      // {
+      //   $match: { _id: { $ne: 'easy' } },
+      // },
+    ]);
+    res.status(200).json({ status: 'success', data: { stats } });
   } catch (error) {
     res.status(400).json({ message: error, status: 'fail' });
   }
