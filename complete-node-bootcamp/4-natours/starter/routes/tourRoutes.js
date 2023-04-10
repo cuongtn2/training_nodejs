@@ -9,6 +9,8 @@ const router = express.Router();
 // Check if body contains the name and price property
 // If not, send back 400 ( bad request)
 // Add it to the pót  handler stack
+router.route('/top-5-cheap').get(tourController.aliasTopTours,tourController.getAllTours);
+
 router
   .route('/')
   .get(tourController.getAllTours)
