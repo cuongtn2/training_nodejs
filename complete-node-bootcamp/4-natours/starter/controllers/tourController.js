@@ -139,19 +139,27 @@ exports.deleteTour = async (req, res) => {
     res.status(404).json({ message: error, status: 'fail' });
   }
 };
-exports.createTour = async (req, res) => {
-  try {
-    const newTours = await Tour.create(req.body);
-    res.status(201).json({
-      status: 'success',
-      data: {
-        tours: newTours,
-      },
-    });
-  } catch (error) {
-    res.status(400).json({ message: error, status: 'fail' });
-  }
+
+const createAsync = (fn) => {
+  console.log(fn);
+  return (req, res, next) => {
+    fn(req, res, next).catch(next);
+  };
 };
+exports.createTour = createAsync(async (req, res) => {
+  const newTours = await Tour.create(req.body);
+  res.status(201).json({
+    status: 'success',
+    data: {
+      tours: newTours,
+    },
+  });
+  // try {
+
+  // } catch (error) {
+  //   res.status(400).json({ message: error, status: 'fail' });
+  // }
+});
 
 exports.getTourStats = async (req, res) => {
   try {
