@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const slugify = require('slugify');
 // eslint-disable-next-line import/no-extraneous-dependencies
-const validator = require('validator');
 const tourSchema = new mongoose.Schema(
   {
     name: {
@@ -12,8 +11,8 @@ const tourSchema = new mongoose.Schema(
       trim: true,
       maxlength: [40, 'A tour name must have less equal then 40 characters'],
       minlength: [10, 'A tour name must have more equal then 10 characters'],
-      // validate: [validator.isAlpha, 'Tour name must only contain characters '],
     },
+    slug: String,
     duration: {
       type: Number,
       require: [true, 'A tour must have a duration'],
@@ -74,7 +73,6 @@ const tourSchema = new mongoose.Schema(
       select: false,
     },
     startDates: [Date],
-    slug: String,
     secretTour: {
       type: Boolean,
       default: false,
