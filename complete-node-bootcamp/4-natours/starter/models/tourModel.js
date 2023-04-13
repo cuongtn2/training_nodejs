@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const slugify = require('slugify');
 // const validator = require('validator');
 
@@ -58,7 +57,7 @@ const tourSchema = new mongoose.Schema(
     summary: {
       type: String,
       trim: true,
-      required: [true, 'A tour must have a summary'],
+      required: [true, 'A tour must have a description'],
     },
     description: {
       type: String,
