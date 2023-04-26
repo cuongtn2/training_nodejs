@@ -3,6 +3,7 @@ import axios from 'axios';
 import { showAlert } from './alerts';
 
 export const login = async (email, password) => {
+  console.log('post')
   try {
     const res = await axios({
       method: 'POST',

@@ -13,8 +13,9 @@ const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewerRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
-
+var cors = require('cors');
 const app = express();
+app.use(cors());
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
@@ -28,6 +29,44 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Set security HTTP headers
 app.use(helmet());
 
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       defaultSrc: ["'self'", 'data:', 'blob:'],
+
+//       baseUri: ["'self'"],
+
+//       fontSrc: ["'self'", 'https:', 'data:'],
+
+//       scriptSrc: [
+//         "'self'",
+
+//         'https://*.cloudflare.com',
+
+//         'https://*.stripe.com',
+
+//         'https://*.mapbox.com'
+//       ],
+
+//       frameSrc: ["'self'", 'https://*.stripe.com'],
+
+//       objectSrc: ["'none'"],
+
+//       styleSrc: ["'self'", 'https:', "'unsafe-inline'"],
+
+//       workerSrc: ["'self'", 'data:', 'blob:'],
+
+//       childSrc: ["'self'", 'blob:'],
+
+//       imgSrc: ["'self'", 'data:', 'blob:'],
+
+//       connectSrc: ["'self'", 'blob:', 'https://*.mapbox.com'],
+
+//       upgradeInsecureRequests: []
+//     }
+//   })
+// );
+
 // Development logging
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -37,7 +76,7 @@ if (process.env.NODE_ENV === 'development') {
 const limiter = rateLimit({
   max: 100,
   windowMs: 60 * 60 * 1000,
-  message: 'Too many requests from this IP, please try again in an hour!',
+  message: 'Too many requests from this IP, please try again in an hour!'
 });
 app.use('/api', limiter);
 
@@ -59,8 +98,8 @@ app.use(
       'ratingsAverage',
       'maxGroupSize',
       'difficulty',
-      'price',
-    ],
+      'price'
+    ]
   })
 );
 
