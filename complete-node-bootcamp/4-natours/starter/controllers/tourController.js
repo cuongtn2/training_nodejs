@@ -6,6 +6,7 @@ const factory = require('./handlerFactory');
 const AppError = require('./../utils/appError');
 
 const multerStorage = multer.memoryStorage();
+
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image')) {
     cb(null, true);
@@ -18,13 +19,14 @@ const upload = multer({
   storage: multerStorage,
   fileFilter: multerFilter
 });
-// upload.single('image')
-// upload.array('images', 5)
 
 exports.uploadTourImages = upload.fields([
   { name: 'imageCover', maxCount: 1 },
   { name: 'images', maxCount: 3 }
 ]);
+
+// upload.single('image') req.file
+// upload.array('images', 5) req.files
 
 exports.resizeTourImages = catchAsync(async (req, res, next) => {
   if (!req.files.imageCover || !req.files.images) return next();
